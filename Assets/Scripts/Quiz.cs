@@ -4,6 +4,8 @@ using UnityEngine;
 using Image = UnityEngine.UI.Image;
 using TMPro;
 using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine.UI;
+using System;
 
 public class Quiz : MonoBehaviour
 {
@@ -16,6 +18,28 @@ public class Quiz : MonoBehaviour
     [SerializeField] Sprite correctAnswerSprite;
 
     void Start()
+    {
+        //DisplayQuestion();
+        GetNextQuestion();
+    }
+
+    void GetNextQuestion()
+    {
+        SetButtonState(true);
+        setDefaultButtonSprites();
+        DisplayQuestion();
+    }
+
+    private void setDefaultButtonSprites()
+    {
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            Image buttonImage = answerButtons[i].GetComponent<Image>();
+            buttonImage.sprite = defaultAnswerSprite;
+        }
+    }
+
+    void DisplayQuestion()
     {
         questionText.text = question.GetQuestion();
 
@@ -30,31 +54,30 @@ public class Quiz : MonoBehaviour
     public void OnAnswerSelected(int index)
     {
         correctAnswerIndex = question.GetCorrectAnswerIndex();
-        Image buttonImage = null;
+        Image buttonImage;
 
         if (index == correctAnswerIndex)
         {
             questionText.text = "Correct";
-            buttonImage = GetButtonImage(buttonImage, index);
-            SetButtonSprite(buttonImage);
+            buttonImage = answerButtons[index].GetComponent<Image>();
+            buttonImage.sprite = correctAnswerSprite;
         }
         else
         {
             questionText.text = "Sorry, the correct answer was:\n" + question.GetAnswer(correctAnswerIndex);
-            buttonImage = GetButtonImage(buttonImage, correctAnswerIndex);
-            SetButtonSprite(buttonImage);
+            buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>();
+            buttonImage.sprite = correctAnswerSprite;
         }
+
+        SetButtonState(false);
     }
 
-    public Image GetButtonImage(Image buttonImage, int index)
+    void SetButtonState(bool state)
     {
-        buttonImage = answerButtons[index].GetComponent<Image>();
-
-        return buttonImage;
-    }
-
-    public void SetButtonSprite(Image buttonImage)
-    {
-        buttonImage.sprite = correctAnswerSprite;
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            Button button = answerButtons[i].GetComponent<Button>();
+            button.interactable = state;
+        }
     }
 }

@@ -37,10 +37,14 @@ public class Quiz : MonoBehaviour
 
     public bool isComplete;
 
+    AudioSource clickSFX;
+
     void Awake()
     {
         timer = FindObjectOfType<Timer>();
         scoreKeeper = FindObjectOfType<ScoreKeeper>();
+        clickSFX = FindObjectOfType<AudioSource>();
+
         progressBar.maxValue = questions.Count;
         progressBar.value = 0;
     }
@@ -116,6 +120,7 @@ public class Quiz : MonoBehaviour
 
     public void OnAnswerSelected(int index)
     {
+        clickSFX.Play();
         hasAnsweredEarly = true;
         DisplayAnswer(index);
         SetButtonState(false);

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     Quiz quiz;
     EndScreen endScreen;
 
+    AudioSource music;
+
     void Awake()
     {
         quiz = FindObjectOfType<Quiz>();
@@ -18,6 +20,9 @@ public class GameManager : MonoBehaviour
     {
         quiz.gameObject.SetActive(true);
         endScreen.gameObject.SetActive(false);
+
+        music = FindObjectOfType<AudioSource>();
+        music.Play();
     }
 
 
